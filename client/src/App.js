@@ -1,10 +1,23 @@
+import React from 'react';
 import './App.css';
+import { Route } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
+import Home from './components/Home';
+import CreateGame from './components/CreateGame'
 
 function App() {
   return (
-    <div className="App">
-      <h1>Henry Videogames</h1>
-    </div>
+    <React.Fragment>
+      <Route exact path={'/'}>
+        <LandingPage />
+      </Route>
+      <Route exact path={'/home'}>
+        <Home />
+      </Route>
+      <Route exact path={'/create'}>
+        <CreateGame />
+      </Route>
+  </React.Fragment>
   );
 }
 
