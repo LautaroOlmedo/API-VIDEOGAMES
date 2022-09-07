@@ -8,10 +8,10 @@ const {Gender} = require('../db');
 routeGender.get('/', async(req, res) =>{
     try{
         const allGenders = await Gender.findAll();
-        allGenders ? res.status(200).json(allGenders) : res.status(404).json('Generos no encontrados');
+        allGenders ? res.status(200).json(allGenders.map(el => el.name)) : res.status(404).json('Generos no encontrados');
     }catch (e){
         console.log(e);
-        res.status(404).json('ERROR EN EL SERVIDOR /Gender')
+        res.status(500).json('ERROR EN EL SERVIDOR /Gender')
     };  
 })
 

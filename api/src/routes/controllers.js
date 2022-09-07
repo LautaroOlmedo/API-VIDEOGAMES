@@ -19,7 +19,7 @@ const apiInfoTotal = async () =>{
             id: el.id,
             name: el.name,
             image: el.background_image,
-            gender: el.genres.map(el => el.name),
+            genders: el.genres.map(el => el.name),
             description: el.description,
             released: el.released,
             rating: el.rating,
@@ -54,10 +54,18 @@ const allInfoGames = async () => {
 
 
 
+
 const allGender = async () =>{
-    const allGenderUrl = await axios.get('https://api.rawg.io/api/genres?key=971fe86049bd4995bb327a8ebca359a7');
-    const allGenderInfo = allGenderUrl.data.results;
-    const infoFinal = await Gender.bulkCreate(allGenderInfo);
+    const validate = await Gender.findOne({  // este validate lo utilizo porque me pareció que optimizaba el codigo frente a un findOrCreate
+        where: {
+          name: "Action",
+        },
+      });
+    if(!validate){
+        const allGenderUrl = await axios.get('https://api.rawg.io/api/genres?key=971fe86049bd4995bb327a8ebca359a7');
+        const allGenderInfo = allGenderUrl.data.results;
+        await Gender.bulkCreate(allGenderInfo);
+    }
 };
 
 module.exports = {allGender, allInfoGames, apiInfoTotal};

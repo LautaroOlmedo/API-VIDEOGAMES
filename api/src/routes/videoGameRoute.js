@@ -9,7 +9,6 @@ const key = '971fe86049bd4995bb327a8ebca359a7'
 routeGame.get('/', async(req, res) =>{
     const {name} = req.query;
     const allGames = await allInfoGames();
-
     try{
         if(name){
             const gameName = allGames.filter(el => el.name.toLowerCase().includes(name.toLowerCase()));
@@ -20,7 +19,7 @@ routeGame.get('/', async(req, res) =>{
     
     }catch(e){
         console.log(e);
-        res.status(404).json('ERROR EN EL SERVIDOR /VIDEOGAMES')    
+        res.status(500).json('ERROR EN EL SERVIDOR /VIDEOGAMES')    
     };  
 });
 
@@ -35,12 +34,13 @@ routeGame.get('/:id', async(req, res) =>{
         }else{
             const urlInfo = await (await axios.get(`https://api.rawg.io/api/games/${id}?key=${key}`)).data;
             const infoApi = [urlInfo];
+            console.log(infoApi);
             const infoFinal = infoApi.map(el => {
                 return{
                         id: el.id,
                         name: el.name,
                         image: el.background_image,
-                        gender: el.genres.map(el => el.name),
+                        genders: el.genres.map(el => el.name),
                         description: el.description,
                         released: el.released,
                         rating: el.rating,
@@ -50,11 +50,24 @@ routeGame.get('/:id', async(req, res) =>{
            infoFinal.length ? res.status(200).json(infoFinal) : res.status(404).json('ERROR LAUTAROOOOOO')
         };
     }catch (e) {
-        res.status(404).json('ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRR')
+        res.status(500).json('ERROR EN EL SERVIDOR /GET/ID')
         console.log(e)   
     };
 });
 
+routeGame.get('/plataformas/1', async(req, res) =>{
+    try {
+        const allGames = await allInfoGames();
+        
+        const allGamesSemiFinal = allGames.map(el => el.platforms)
+        const allGamesFinal = allGamesSemiFinal.flat(Infinity);
+        const sinDuplciar = [... new Set(allGamesFinal)];
+        //console.log(sinDuplciar);
+        sinDuplciar ? res.status(200).json(sinDuplciar) : res.status(404).json('Plataformas no encontradas')
+    } catch (error) {
+        console.log(error)
+    }
+});
 
 // -------------------- POST --------------------
 routeGame.post('/', async (req, res) =>{
@@ -90,7 +103,7 @@ routeGame.post('/', async (req, res) =>{
             res.status(404).json('Error al crear el juego');
         };
     }else{
-        res.status(404).json('Genero desconocido / juego ya creado')
+        res.status(500).json('Genero desconocido / juego ya creado')
     }
 });
 
