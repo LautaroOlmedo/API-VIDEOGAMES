@@ -1,0 +1,35 @@
+.FondoHome{
+    background-image: url('https://media.istockphoto.com/vectors/digital-technology-gaming-abstract-background-vector-id1164222265?k=20&m=1164222265&s=170667a&w=0&h=IVofCowQw51bHMHrh7FYP6K8TWUu2opeZN6iQ3HmGPg=');
+   
+    background-repeat: repeat;
+    height: 364vh;
+    width: 200vh;
+  
+}
+
+body{
+    margin-top: -22px;
+
+}
+button{
+    background-color: rgb(118, 204, 233);
+    font-size: 12px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    border: 2px solid gray;
+    margin-top: 8px;
+}
+input{
+    background-color: white;
+    border-radius: 12px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+  
+    
+    
+}
+
+select{
+    background-color: rgb(118, 204, 233);
+    margin-top: 8px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    
+}

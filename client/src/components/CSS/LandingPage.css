@@ -1,0 +1,22 @@
+
+.FondoLanding{
+    
+    background-image: url('https://media.istockphoto.com/vectors/game-background-with-gamepad-and-graphic-elements-joystick-sign-vector-id1207017851?k=20&m=1207017851&s=612x612&w=0&h=Ur1iIefBRRj3Jd34W-mNdKOAplKnhQ-hBPUaGJ8YfWg=');
+    /* background-repeat: no-repeat; */
+    height: 100vh;
+    width: 200vh;
+    text-align: center;
+}
+
+body{
+    margin-top: -22px;
+}
+
+.ButonLanding{
+    font-size: 60px;
+    background-color: rgb(143, 37, 81);
+    border-radius: 15px;
+    font-family: 'Times New Roman', Times, serif;
+    box-shadow: 0 0 10px 0 white;
+    margin-top: 240px;
+}

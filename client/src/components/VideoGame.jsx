@@ -1,13 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import './CSS/Card.css'
 
-export default function videoGame({name, image, gender}){
+export default function videoGame({name, image, gender, rating, id}){
     return(
-        <React.Fragment>
-            <center>
-            <h3>{name}</h3>
-            <h3>{gender}</h3>
-            <img src={image} alt='Image not found' height={200} width={350}/>
-            </center>
-        </React.Fragment>
+                <div className="Card">
+                    <h2>{name}</h2>
+                    <p className="Rating">{rating}</p>
+                    <h3>{gender}</h3>
+                    <img className="imgCard" src={image} alt='Image not found' height={200} width={250}/>
+                    <br/>
+                    <Link to={'/home/' + id}><button className="BotonDetail">Detail</button></Link>
+                </div> 
     );
 };

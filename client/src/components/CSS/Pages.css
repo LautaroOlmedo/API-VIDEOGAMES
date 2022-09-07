@@ -1,0 +1,24 @@
+.Paginado{
+    margin-top: -22px;
+    padding-top: 50px;
+    
+    height: 60px;
+    text-align: center;
+    color: white;
+    position: relative;
+    /* margin-left: 25px; */
+    margin-right: 80px;
+    font-family: 'Times New Roman', Times, serif;
+ 
+}
+.paginate{
+    display: inline-block;
+    text-align: center;
+    padding-left: 8px;
+    font-size: 30px;
+
+}
+
+.Contenedor{
+    padding-top: 10px;
+}

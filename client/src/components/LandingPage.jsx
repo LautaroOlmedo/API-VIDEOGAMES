@@ -1,13 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import s from '../components/LandingPage.module.css'
+import './CSS/LandingPage.css';
+
 
 export default function LandingPage(){
     return(
-        <div>
+        <div className="FondoLanding">
             <h1>Videogames API</h1>
             <Link to={'/home'}>
-                <button>HOME</button>
+                <button className="ButonLanding">HOME</button>
             </Link>
         </div>
     )

@@ -1,29 +1,36 @@
 import React from "react";
 import { useState } from "react";
-import s from '../components/Pages.module.css'
-export default function Pages({page, setPage, max}){
-    // console.log(page, setPage, max)
-    const [input, setInput] = useState(1);
+import './CSS/Pages.css'
 
-    const handleNext = () =>{
-        setInput(input + 1);
-        setPage(page+ 1);
-    }
-    const handlePrevious = () =>{
-        setInput(input - 1);
-        setPage(page - 1);
-    }
+
+
+
+export default function Pages({gamesPerPage, paginado, games}){
+
+    const pagesNumber = []
+
+    for(let i = 1; i <= Math.ceil(games/gamesPerPage); i++){
+        pagesNumber.push(i);
+    };
+   
+    
 
     return(
-        <React.Fragment>
-            {
-                input > 1 ? <button  onClick={handlePrevious}>Previous</button> : null
-            }
-            <input value={input}></input>
-            <p>de {Math.ceil(max)}</p>
-            {
-                input < 7 ? <button className={`${s.button}`} onClick={handleNext}>Next</button> : null
-            }
-        </React.Fragment>
+        <div className="Contenedor">
+       
+            <nav className="Paginado">
+                <ul>
+                    {
+                        pagesNumber && pagesNumber.map(number =>(
+                            <li className="paginate" key={number}>
+                                <a onClick={() => paginado(number)}>{number}</a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </nav>
+        </div>
+         
+        
     )
 }
