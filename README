@@ -1,6 +1,10 @@
 API-REST VIDEOGAMES
 
 La API se realizó utilizando los siguientes endpoints:
+https://api.rawg.io/api/games/{id}?key
+https://api.rawg.io/api/games?key
+https://api.rawg.io/api/genres?key
+https://api.rawg.io/api/games/{id}?key
 
 BackEnd:
 Creado a partir de Node.js utilizando Express como Framework. Base de datos PostgresSQL
