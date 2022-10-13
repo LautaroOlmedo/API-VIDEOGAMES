@@ -15,4 +15,5 @@ Creado con React y Redux
 Para poder correrlo en local tenes que:
 1) insertar el comando npm i sobre la carpeta api y el comando npm i sobre la carpeta client
 2) insertar el comando npm start tanto en la carpeta api como en la carpeta client (Por defecto el Back corre en el puerto 3001 y el Front en el 3000)
-3) Listo!! Espero que te guste 
+3) Abrir la app en tu navegador favorito
+4) Listo!! Espero que te guste 
