@@ -1,7 +1,5 @@
-const {allGender} = require('./src/routes/controllers');
-const {
-  PORT
-} = process.env;
+const {getAllGender} = require('./src/controllers/gendersController');
+
 
 //                       _oo0oo_
 //                      o8888888o
@@ -27,8 +25,10 @@ const { conn } = require('./src/db.js');
 
 // Syncing all the models at once.
 conn.sync({ force: false}).then(() => {
-  server.listen(process.env.PORT, () => {
+  server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
-    allGender();
+    getAllGender();
   });
 });
+
+module.exports = server;

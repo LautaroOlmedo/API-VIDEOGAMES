@@ -1,8 +1,7 @@
 const axios = require('axios').default;
 const db = require('../db');
-const {Videogame, Gender} = require('../db')
+const {Videogame, Gender} = require('../db');
 const key = '971fe86049bd4995bb327a8ebca359a7'
-
 
 const apiInfoTotal = async () =>{
     let games = [];
@@ -13,6 +12,7 @@ const apiInfoTotal = async () =>{
         games = [...games, ...data1.data.results];
         page ++;
     };
+
     games.flat(Infinity);
     const misGames = games.map(el =>{
         return {
@@ -48,24 +48,17 @@ const allInfoGames = async () => {
     return infoTotal;
 };
 
-
-
-// ----------------------------------------------------------------------------
-
-
-
-
-const allGender = async () =>{
-    const validate = await Gender.findOne({  // este validate lo utilizo porque me pareció que optimizaba el codigo frente a un findOrCreate
-        where: {
-          name: "Action",
-        },
-      });
-    if(!validate){
-        const allGenderUrl = await axios.get('https://api.rawg.io/api/genres?key=971fe86049bd4995bb327a8ebca359a7');
-        const allGenderInfo = allGenderUrl.data.results;
-        await Gender.bulkCreate(allGenderInfo);
-    }
+const getAllPlatforms = async (req, res) =>{
+    try {
+        let allGames = await allInfoGames();
+        const allGamesSemiFinal = allGames.map(el => el.platforms)
+        const allGamesFinal = allGamesSemiFinal.flat(Infinity);
+        const sinDuplciar = [... new Set(allGamesFinal)];
+        //console.log(sinDuplciar);
+        sinDuplciar ? res.status(200).json(sinDuplciar) : res.status(404).json('Plataformas no encontradas')
+    }catch(e) {
+        console.log(e)
+    };
 };
-
-module.exports = {allGender, allInfoGames, apiInfoTotal};
+  
+module.exports = {getAllPlatforms};
