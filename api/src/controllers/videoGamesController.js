@@ -5,7 +5,7 @@ const key = '971fe86049bd4995bb327a8ebca359a7'
 
 // -------------------------
 
-const apiInfoTotal = async () =>{
+const apiInfoTotal = async (paginate) =>{
     try {
         let games = [];
         let page = 1;
@@ -21,14 +21,14 @@ const apiInfoTotal = async () =>{
                 id: el.id,
                 name: el.name,
                 image: el.background_image,
-                genres: el.genres.map(el => el.name),
+                genres: el.genres.map(el => el.name + " "),
                 description: el.description,
                 released: el.released,
                 rating: el.rating,
                 platforms: el.parent_platforms.map(el => el.platform.name)
             }
         });
-        return misGames; 
+        return misGames
     }catch(e){
         console.log(e);
     };
@@ -47,7 +47,7 @@ const dbVideoGameInfo = async () =>{
         });
         let genres = []
         for(let i = 0; i < gameInDb[0].dataValues.genders.length; i++){
-            genres.push( gameInDb[0].dataValues.genders[i].dataValues.name);
+            genres.push( gameInDb[0].dataValues.genders[i].dataValues.name + " ");
         };
         let gameInDbFinal = gameInDb.map(el =>{
             return {
@@ -59,7 +59,8 @@ const dbVideoGameInfo = async () =>{
             released: el.released,
             rating: el.rating,
             platforms: el.platforms,
-            createdInDb: el.createdInDb
+            createdInDb: el.createdInDb,
+            // active: el.active
             }
         });
         if(gameInDbFinal) return gameInDbFinal;
@@ -69,12 +70,11 @@ const dbVideoGameInfo = async () =>{
     };
 };
 
-
-// ------------------------- MY API 
+// ------------------------- MY API-REST 
 
 const getAllGames = async (req, res) => {
     try {
-        let {rating, genres} = req.query;
+        let {rating, genres} = req.query
         const apiInfo = await apiInfoTotal();
         const dbInfo = await dbVideoGameInfo();
         let infoTotal = apiInfo.concat(dbInfo);
@@ -86,10 +86,41 @@ const getAllGames = async (req, res) => {
                 infoTotal = infoTotal.filter((el) => el.genres.includes(genres));
             };
         };
+        
         infoTotal ? res.status(200).json(infoTotal) : res.status(404).json({message: 'canot found video games'});
     }catch(e){
         console.log(e);
         res.status(500).json({message: 'Server error in getAllGames'});
+    };
+};
+
+const getAllGamesPerPage = async(req, res) =>{
+    try {
+        let {page} = req.params;
+        if(page && page < 0) return res.status(400).json({message: 'canot found page'});
+        const apiInfo = await apiInfoTotal();
+        const dbInfo = await dbVideoGameInfo();
+        let infoTotal = apiInfo.concat(dbInfo);
+        let previousPage = `http://localhost:3001/api/videogames/page/${Number(page) - 1}`;
+        let nextPage = `http://localhost:3001/api/videogames/page/${Number(page) + 1}`;
+        if(page == 0) previousPage = `null`
+
+        let data = {
+            page: Number(page),
+            prev: previousPage,
+            next: nextPage,
+            data1: []
+        };
+        for(let i = 15 * Number(page); i < infoTotal.length; i++){
+            data.data1.push(infoTotal[i]);
+            if(data.data1.length == 15) break;
+        };
+
+        if(!data.data1.length) return res.status(400).json({message: 'canot found page'});
+
+        data ? res.json(data) : res.json('error');
+    }catch(e){
+        console.log(e); 
     };
 };
 
@@ -124,7 +155,8 @@ const getGameById = async (req, res) =>{
                 released: el.released,
                 rating: el.rating,
                 platforms: el.platforms,
-                createdInDb: el.createdInDb
+                createdInDb: el.createdInDb,
+                // active: el.active
                 }
             });
             gameInDbFinal ? res.status(200).json(gameInDbFinal) : res.status(404).json({message: 'id not exists'});
@@ -190,20 +222,39 @@ const createGame = async (req, res) =>{
 
 const updateGame = async (req, res) =>{
     try {
-        let {name, image, description, released, rating, platforms, genres} = req.body; 
+        let {id} = req.params;
+        if(!id) return res.satus(400).json({message: 'canot found ID'});
+        let [updateGame] = await Videogame.update(req.body, { where: { id } });
+        updateGame ? res.status(200).json({updateGame}) : res.status(400).json({message: 'missing info'});
     } catch (e){
         console.log(e);
-        res.status(500).json({message: 'Server errir in updateGame'})
+        res.status(500).json({message: 'Server error in updateGame'})
     };
 };
 
 const deleteGame = async (req, res) =>{
     try {
+        const {id} = req.params;
+        if(!id) return res.satus(400).json({message: 'canot found ID'});
+        await Videogame.destroy()
         
     }catch(e){
         console.log(e);
-        res.status(500).json({message: 'Server errir in deleteteGame'})  
+        res.status(500).json({message: 'Server error in deleteteGame'})  
     };
 };
 
-module.exports = { getAllGames, getGameById, createGame, apiInfoTotal};
+// const desabaleaGame = async (req, res) => {
+// 	try {
+// 		const { id } = req.params;
+// 		let [deletePhone] = await Phones.update({ active: 0 }, { where: { id } });
+// 		if (!deletePhone)
+// 			return res.status(404).json({ message: 'phone not found' });
+// 		res.status(200).json({ message: 'phone deleted' });
+// 	} catch (e) {
+// 		console.log(e);
+// 		res.status(500).json({ message: 'Server Error' });
+// 	}
+// };
+
+module.exports = { getAllGames, getAllGamesPerPage, getGameById, createGame, apiInfoTotal, updateGame};
