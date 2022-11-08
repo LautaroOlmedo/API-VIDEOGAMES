@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { postGame, getAllGenders } from "../redux/actions";
-//import { useForm } from "./hooks/useForm";
-import './CSS/Form.css'
-
-
+import { postGame, getAllGenders } from "../../redux/actions";
 
 export const useForm = (initialForm, validateForm) =>{
     const dispatch = useDispatch();

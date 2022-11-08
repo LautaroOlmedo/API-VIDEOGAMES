@@ -1,10 +1,20 @@
 import axios from 'axios';
 
-export function getAllGames(){
+export function getAllGames(page){
     return async(dispatch) =>{ 
-        let data = await axios.get('http://localhost:3001/videogames');
+        let data = await axios.get('http://localhost:3001/api/videogames/page/' + page);
         return dispatch({
             type: 'GET_ALL',
+            payload: data.data
+        });  
+    };
+};
+
+export function getNextGames(page){
+    return async(dispatch) =>{ 
+        let data = await axios.get(page);
+        return dispatch({
+            type: 'GET_NEXT_GAMES',
             payload: data.data
         });  
     };

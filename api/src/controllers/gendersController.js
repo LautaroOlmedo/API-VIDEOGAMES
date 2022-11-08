@@ -12,7 +12,7 @@ const getAllGender = async () =>{
             },
         });
        if(!validate){
-          const allGenderUrl = await axios.get(`https://api.rawg.io/api/games?key=${key}`);
+          const allGenderUrl = await axios.get(`https://api.rawg.io/api/genres?key=${key}`);
           const allGenderInfo = await allGenderUrl.data.results;
           await Gender.bulkCreate(allGenderInfo);
         }

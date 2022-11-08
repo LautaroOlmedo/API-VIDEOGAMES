@@ -1,6 +1,7 @@
 const initialState = {
     videoGames: [],
     allVideoGames: [],
+    nextGames: [],
     platforms: [],
     genders: [],
     allGenders: [],
@@ -15,7 +16,11 @@ export default function rootReducer(state= initialState, action){
                 ...state,
                 videoGames: action.payload,
                 allVideoGames: action.payload
-
+            }
+        case 'GET_NEXT_GAMES':
+            return{
+                ...state,
+                nextGames: action.payload
             }
         case 'FILTER_BY_CREATED':
             
