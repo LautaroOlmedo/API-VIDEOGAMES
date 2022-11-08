@@ -46,6 +46,8 @@ const dbVideoGameInfo = async () =>{
             }
         });
         let genres = []
+        console.log(gameInDb, 'MI GAME INDB');
+        console.log(gameInDb.dataValues, 'MI DATA VALUES');
         for(let i = 0; i < gameInDb[0].dataValues.genders.length; i++){
             genres.push( gameInDb[0].dataValues.genders[i].dataValues.name + " ");
         };
@@ -60,7 +62,7 @@ const dbVideoGameInfo = async () =>{
             rating: el.rating,
             platforms: el.platforms,
             createdInDb: el.createdInDb,
-            // active: el.active
+            active: el.active
             }
         });
         if(gameInDbFinal) return gameInDbFinal;
@@ -115,7 +117,8 @@ const getAllGamesPerPage = async(req, res) =>{
             data.data1.push(infoTotal[i]);
             if(data.data1.length == 15) break;
         };
-
+        console.log(data.data1.next);
+        
         if(!data.data1.length) return res.status(400).json({message: 'canot found page'});
 
         data ? res.json(data) : res.json('error');
@@ -156,7 +159,7 @@ const getGameById = async (req, res) =>{
                 rating: el.rating,
                 platforms: el.platforms,
                 createdInDb: el.createdInDb,
-                // active: el.active
+                active: el.active
                 }
             });
             gameInDbFinal ? res.status(200).json(gameInDbFinal) : res.status(404).json({message: 'id not exists'});
@@ -186,9 +189,9 @@ const getGameById = async (req, res) =>{
 
 const createGame = async (req, res) =>{
     try{
-        const {name, image, genres, description, released, rating, platforms} = req.body;
+        let {name, image, genres, description, released, rating, platforms} = req.body;
         if(!name || !genres || !description || !released || !rating || !platforms) return res.status(404).json({message: 'missing info'});
-        if(!image) image = 'C:/Users/Lautaro.DESKTOP-PFAUVN7/Desktop/PI-VIDEOGAMESS/API-VIDEOGAMES/videogame.png';
+        if(image === undefined) image = 'C:/Users/Lautaro.DESKTOP-PFAUVN7/Desktop/PI-VIDEOGAMESS/API-VIDEOGAMES/image/readme/1665931876434.png';
         parseFloat(rating);
         if(rating < 1.0 || rating > 10.0) return res.status(404).json({message: 'rating only accepts values ​​between 1.0 and 10.0'});
         const validateGame = await Videogame.findOne({
@@ -244,17 +247,17 @@ const deleteGame = async (req, res) =>{
     };
 };
 
-// const desabaleaGame = async (req, res) => {
-// 	try {
-// 		const { id } = req.params;
-// 		let [deletePhone] = await Phones.update({ active: 0 }, { where: { id } });
-// 		if (!deletePhone)
-// 			return res.status(404).json({ message: 'phone not found' });
-// 		res.status(200).json({ message: 'phone deleted' });
-// 	} catch (e) {
-// 		console.log(e);
-// 		res.status(500).json({ message: 'Server Error' });
-// 	}
-// };
+const desabaleaGame = async (req, res) => {
+	try {
+		const { id } = req.params;
+		let [deletePhone] = await Phones.update({ active: false }, { where: { id } });
+		if (!deletePhone)
+			return res.status(404).json({ message: 'canot found game'});
+		res.status(200).json({ message: 'game disabled' });
+	} catch (e) {
+		console.log(e);
+		res.status(500).json({ message: 'Server error in desableGame' });
+	}
+};
 
 module.exports = { getAllGames, getAllGamesPerPage, getGameById, createGame, apiInfoTotal, updateGame};
