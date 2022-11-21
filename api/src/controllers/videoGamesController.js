@@ -5,7 +5,7 @@ const key = '971fe86049bd4995bb327a8ebca359a7'
 
 // -------------------------
 
-const apiInfoTotal = async (paginate) =>{
+const apiInfoTotal = async () =>{
     try {
         let games = [];
         let page = 1;
@@ -111,15 +111,15 @@ const getAllGamesPerPage = async(req, res) =>{
             page: Number(page),
             prev: previousPage,
             next: nextPage,
-            data1: []
+            games: []
         };
         for(let i = 15 * Number(page); i < infoTotal.length; i++){
-            data.data1.push(infoTotal[i]);
-            if(data.data1.length == 15) break;
+            data.games.push(infoTotal[i]);
+            if(data.games.length == 15) break;
         };
-        console.log(data.data1.next);
+        console.log(data.games.next);
         
-        if(!data.data1.length) return res.status(400).json({message: 'canot found page'});
+        if(!data.games.length) return res.status(400).json({message: 'canot found page'});
 
         data ? res.json(data) : res.json('error');
     }catch(e){
